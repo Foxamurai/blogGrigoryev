@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace blogGrigoryev.Controllers
 {
+    /// <summary>
+    /// Контроллер для работы с представлением Blog
+    /// </summary>
     public class BlogController : Controller
     {
         /// <summary>
