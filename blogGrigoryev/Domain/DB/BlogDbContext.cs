@@ -1,7 +1,9 @@
 ﻿using blogGrigoryev.Model;
+using blogGrigoryev.Model.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -46,8 +48,58 @@ namespace blogGrigoryev.Domain.DB
                 .IsRequired(true);
                 x.HasIndex("EmployeeId").IsUnique(true);
             });
+
+            #region Employee
+
+            modelBuilder.Entity<Employee>(b =>
+            {
+                b.ToTable("Employees");
+                EntityId(b);
+                b.Property(x => x.FirstName)
+                    .HasColumnName("FirstName")
+                    .IsRequired();
+                b.Property(x => x.Surname)
+                    .HasColumnName("Surname")
+                    .IsRequired();
+                b.Property(x => x.Address)
+                    .HasColumnName("Address");
+                b.Ignore(x => x.FullName);
+
+            });
+
+            #endregion
+
+            #region BlogPost
+            modelBuilder.Entity<BlogPost>(b =>
+            {
+                b.ToTable("BlogPost");
+                EntityId(b);
+                b.Property(x => x.Created)
+                    .HasColumnName("Created")
+                    .IsRequired();
+                b.Property(x => x.Title)
+                    .HasColumnName("Title")
+                    .IsRequired();
+                b.Property(x => x.Data)
+                    .HasColumnName("Data")
+                    .IsRequired();
+                b.HasOne(x => x.Owner)
+                    .WithMany()
+                    .IsRequired();
+
+            });
+            #endregion
         }
 
+        private static void EntityId<TEntity>(EntityTypeBuilder<TEntity> builder)
+            where TEntity : Entity
+        {
+            builder.Property(x => x.Id)
+                .HasColumnName("Id")
+                .IsRequired();
+            builder.HasKey(x => x.Id)
+                .HasAnnotation("Npgsql:Serial", true);
+        }
 
     }
 }
