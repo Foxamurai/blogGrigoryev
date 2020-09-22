@@ -29,7 +29,7 @@ namespace blogGrigoryev
         {
             services.AddControllersWithViews();
             services.AddDbContext<BlogDbContext>(options =>
-                options.UseNpgsql("Username=postgres;Databse=blog;Password=root;Host=localhost"));
+                options.UseNpgsql("Username=postgres;Database=blog;Password=root;Host=localhost"));
 
             services.AddIdentity<User, IdentityRole<int>>(options =>
             {
