@@ -1,10 +1,6 @@
-﻿using blogGrigoryev.Model.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using blogGrigoryev.Domain.Model.Common;
 
-namespace blogGrigoryev.Model
+namespace blogGrigoryev.Domain.Model
 {
     public class Employee : Entity
     {

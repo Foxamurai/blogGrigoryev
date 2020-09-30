@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace blogGrigoryev.Model
+namespace blogGrigoryev.Domain.Model
 {
     public class User : IdentityUser<int>
     {

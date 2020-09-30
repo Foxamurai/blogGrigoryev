@@ -5,11 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using blogGrigoryev.Domain.Model;
-using blogGrigoryev.Exceptions.Http;
 using blogGrigoryev.Security;
 using blogGrigoryev.ViewModels.Account;
 using blogGrigoryev.Domain.DB;
+using blogGrigoryev.Model;
 
 namespace blogGrigoryev.Controllers
 {
@@ -130,7 +129,7 @@ namespace blogGrigoryev.Controllers
                 return View(model);
             }
 
-            await _userManager.AddToRoleAsync(user, SecurityConstants.СustomerRole);
+            await _userManager.AddToRoleAsync(user, SecurityConstants.CustomerRole);
             _blogDbContext.SaveChanges();
 
             return RedirectToAction("Index", "Blog");

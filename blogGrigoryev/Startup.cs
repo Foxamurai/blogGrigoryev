@@ -1,17 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using blogGrigoryev.Domain.DB;
-using blogGrigoryev.Model;
+using blogGrigoryev.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using blogGrigoryev.Infrastructure.Guarantors;
+using blogGrigoryev.Domain.Model;
+using System;
 
 namespace blogGrigoryev
 {
@@ -27,9 +25,16 @@ namespace blogGrigoryev
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            
             services.AddDbContext<BlogDbContext>(options =>
                 options.UseNpgsql("Username=postgres;Database=blog;Password=root;Host=localhost"));
+
+            //Добавление безопасности
+            services.AddSecurity();
+
+            services.AddControllersWithViews();
+
+            services.AddSingleton<IStartupPreConditionGuarantor, SeedDataGuarantor>();
 
             services.AddIdentity<User, IdentityRole<int>>(options =>
             {
@@ -43,6 +48,23 @@ namespace blogGrigoryev
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var guarantors = scope.ServiceProvider.GetService<IStartupPreConditionGuarantor>();
+                try
+                {
+                    Console.WriteLine("Startup guarantors started");
+                    foreach (var guarantor in guarantors)
+                        guarantor.Ensure(scope.ServiceProvider);
+
+                    Console.WriteLine("Startup guarantors executed successfuly");
+                }
+                catch
+                {
+                    Console.WriteLine("Startup guarantors failed");
+                    throw;
+                }
+            }
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

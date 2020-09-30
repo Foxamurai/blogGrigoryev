@@ -1,15 +1,9 @@
-﻿using blogGrigoryev.Model;
-using blogGrigoryev.Model.Common;
+﻿using blogGrigoryev.Domain.Model;
+using blogGrigoryev.Domain.Model.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 
 namespace blogGrigoryev.Domain.DB
 {
