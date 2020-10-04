@@ -66,7 +66,7 @@ namespace blogGrigoryev.Domain.DB
             #region BlogPost
             modelBuilder.Entity<BlogPost>(b =>
             {
-                b.ToTable("BlogPost");
+                b.ToTable("BlogPosts");
                 EntityId(b);
                 b.Property(x => x.Created)
                     .HasColumnName("Created")
@@ -85,6 +85,12 @@ namespace blogGrigoryev.Domain.DB
             #endregion
         }
 
+
+        /// <summary>
+        /// Описание идентификатора сущности модели
+        /// </summary>
+        /// <typeparam name="TEntity">Тип сущности</typeparam>
+        /// <param name="builder">Построитель модели данных</param>
         private static void EntityId<TEntity>(EntityTypeBuilder<TEntity> builder)
             where TEntity : Entity
         {

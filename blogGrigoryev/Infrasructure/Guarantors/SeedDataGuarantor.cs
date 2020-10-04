@@ -74,8 +74,8 @@ namespace blogGrigoryev.Infrastructure.Guarantors
 
             foreach (var role in roles)
             {
-                var roleExit = await roleManager.RoleExistsAsync(role.Name);
-                if (!roleExit)
+                var roleExist = await roleManager.RoleExistsAsync(role.Name);
+                if (!roleExist)
                 {
                     context.Roles.Add(role);
                     context.SaveChanges();

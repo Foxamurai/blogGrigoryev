@@ -29,12 +29,12 @@ namespace blogGrigoryev
             services.AddDbContext<BlogDbContext>(options =>
                 options.UseNpgsql("Username=postgres;Database=blog;Password=root;Host=localhost"));
 
-            //Добавление безопасности
-            services.AddSecurity();
-
+            
             services.AddControllersWithViews();
 
-            services.AddSingleton<IStartupPreConditionGuarantor, SeedDataGuarantor>();
+            var serviceProvider = services.BuildServiceProvider();
+            var guarantor = new SeedDataGuarantor(serviceProvider);
+            guarantor.EnsureAsync();
 
             services.AddIdentity<User, IdentityRole<int>>(options =>
             {
@@ -50,7 +50,7 @@ namespace blogGrigoryev
         {
             using (var scope = app.ApplicationServices.CreateScope())
             {
-                var guarantors = scope.ServiceProvider.GetService<IStartupPreConditionGuarantor>();
+                var guarantors = scope.ServiceProvider.GetServices<IStartupPreConditionGuarantor>();
                 try
                 {
                     Console.WriteLine("Startup guarantors started");
@@ -59,7 +59,7 @@ namespace blogGrigoryev
 
                     Console.WriteLine("Startup guarantors executed successfuly");
                 }
-                catch
+                catch (StartupPreConditionException)
                 {
                     Console.WriteLine("Startup guarantors failed");
                     throw;
@@ -77,11 +77,7 @@ namespace blogGrigoryev
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

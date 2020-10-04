@@ -33,7 +33,7 @@ namespace blogGrigoryev.Security
         /// <summary>
         /// Email администратора
         /// </summary>
-        public const string AdminEmail = "admin@text.ru";
+        public const string AdminEmail = "admin@test.ru";
 
         /// <summary>
         /// Имя администратора

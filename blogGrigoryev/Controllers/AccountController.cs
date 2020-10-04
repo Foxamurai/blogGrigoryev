@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using blogGrigoryev.Security;
 using blogGrigoryev.ViewModels.Account;
 using blogGrigoryev.Domain.DB;
-using blogGrigoryev.Model;
+using blogGrigoryev.Domain.Model;
 
 namespace blogGrigoryev.Controllers
 {
