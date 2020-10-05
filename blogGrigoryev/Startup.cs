@@ -28,14 +28,7 @@ namespace blogGrigoryev
             
             services.AddDbContext<BlogDbContext>(options =>
                 options.UseNpgsql("Username=postgres;Database=blog;Password=root;Host=localhost"));
-
-            
-            services.AddControllersWithViews();
-
-            var serviceProvider = services.BuildServiceProvider();
-            var guarantor = new SeedDataGuarantor(serviceProvider);
-            guarantor.EnsureAsync();
-
+                                    
             services.AddIdentity<User, IdentityRole<int>>(options =>
             {
                 options.Password.RequireLowercase = false;
@@ -43,6 +36,12 @@ namespace blogGrigoryev
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireDigit = false;
             }).AddEntityFrameworkStores<BlogDbContext>();
+
+            services.AddControllersWithViews();
+
+            var serviceProvider = services.BuildServiceProvider();
+            var guarantor = new SeedDataGuarantor(serviceProvider);
+            guarantor.EnsureAsync();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +76,12 @@ namespace blogGrigoryev
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -85,10 +89,7 @@ namespace blogGrigoryev
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
+            
         }
     }
 }
