@@ -11,7 +11,7 @@ namespace blogGrigoryev.Domain.DB
     {
         public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            Database.Migrate();
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace blogGrigoryev.Domain.DB
 
             #endregion
 
-            #region BlogPost
+            #region BlogPosts
             modelBuilder.Entity<BlogPost>(b =>
             {
                 b.ToTable("BlogPosts");

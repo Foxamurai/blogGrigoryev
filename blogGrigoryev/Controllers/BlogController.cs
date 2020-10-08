@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlogForStudents.Security.Extensions;
 using blogGrigoryev.Domain.DB;
+using blogGrigoryev.Domain.Model;
+using blogGrigoryev.ViewModels.Blog;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,12 +24,21 @@ namespace blogGrigoryev.Controllers
         }
 
         /// <summary>
-        /// генерации результата запроса страницы Blog
+        /// Главная страница
         /// </summary>
-        /// <returns>Представление Blog</returns>
+        /// <returns>Представление</returns>
         public IActionResult Index()
         {
-            return View();
+            var posts = _blogDbContext.BlogPosts
+                .Select(x => new BlogPostItemViewModel
+                {
+                    Author = x.Owner.FullName,
+                    Created = x.Created,
+                    Data = x.Data,
+                    Title = x.Title
+                }).OrderByDescending(x => x.Created);
+
+            return View(posts);
         }
 
         /// <summary>
@@ -47,9 +59,46 @@ namespace blogGrigoryev.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddPost(NewPostModel model)
+        public IActionResult AddPost(NewPostViewModel model)
         {
+            if (!ModelState.IsValid)
+                return View(model);
 
+            var user = this.GetAuthorizedUser();
+
+            var post = new BlogPost
+            {
+                Created = DateTime.Now,
+                Data = model.Data,
+                Title = model.Title,
+                Owner = user.Employee
+            };
+
+            _blogDbContext.BlogPosts.Add(post);
+
+            _blogDbContext.SaveChanges();
+
+            return View();
+               
+        }
+
+        [Authorize]
+        [HttpGet]
+        
+        public IActionResult UserPosts()
+        {
+            var user = this.GetAuthorizedUser();
+            var posts = _blogDbContext.BlogPosts
+                .Where(x => x.Owner.Id == user.Id)
+                .Select(x => new BlogPostItemViewModel
+                {
+                    Author = x.Owner.FullName,
+                    Created = x.Created,
+                    Data = x.Data,
+                    Title = x.Title
+                }).OrderByDescending(x => x.Created);
+
+            return View(posts);
         }
 
     }

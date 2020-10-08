@@ -93,7 +93,7 @@ namespace blogGrigoryev.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BlogPost",
+                name: "BlogPosts",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -105,9 +105,9 @@ namespace blogGrigoryev.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BlogPost", x => x.Id);
+                    table.PrimaryKey("PK_BlogPosts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BlogPost_Employees_OwnerId",
+                        name: "FK_BlogPosts_Employees_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "Employees",
                         principalColumn: "Id",
@@ -243,8 +243,8 @@ namespace blogGrigoryev.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlogPost_OwnerId",
-                table: "BlogPost",
+                name: "IX_BlogPosts_OwnerId",
+                table: "BlogPosts",
                 column: "OwnerId");
         }
 
@@ -266,7 +266,7 @@ namespace blogGrigoryev.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BlogPost");
+                name: "BlogPosts");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

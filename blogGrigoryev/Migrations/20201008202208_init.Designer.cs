@@ -10,8 +10,8 @@ using blogGrigoryev.Domain.DB;
 namespace blogGrigoryev.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20201004141620_0001")]
-    partial class _0001
+    [Migration("20201008202208_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -180,7 +180,7 @@ namespace blogGrigoryev.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("BlogPost");
+                    b.ToTable("BlogPosts");
                 });
 
             modelBuilder.Entity("blogGrigoryev.Domain.Model.Employee", b =>
